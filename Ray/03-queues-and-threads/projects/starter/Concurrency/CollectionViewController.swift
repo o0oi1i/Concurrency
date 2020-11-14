@@ -49,25 +49,26 @@ final class CollectionViewController: UICollectionViewController {
     urls = serialUrls.compactMap { URL(string: $0) }
   }
   
-//  private func downloadWithGlobalQueue(at indexPath: IndexPath) {
-//    DispatchQueue.global(qos: .utility).async { [weak self] in
-//      guard let self = self else {
-//        return
-//      }
-//
-//      let url = self.urls[indexPath.item]
-//      guard let data = try? Data(contentsOf: url),
-//            let image = UIImage(data: data) else {
-//        return
-//      }
-//
-//      DispatchQueue.main.async {
-//        if let cell = self.collectionView.cellForItem(at: indexPath) as? PhotoCell {
-//          cell.display(image: image)
-//        }
-//      }
-//    }
-//  }
+  private func downloadWithGlobalQueue(at indexPath: IndexPath) {
+    DispatchQueue.global(qos: .utility).async { [weak self] in
+      guard let self = self else {
+        return
+      }
+
+      let url = self.urls[indexPath.item]
+      guard let data = try? Data(contentsOf: url),
+            let image = UIImage(data: data) else {
+        return
+      }
+
+      DispatchQueue.main.async {
+        if let cell = self.collectionView.cellForItem(at: indexPath) as? PhotoCell {
+          cell.display(image: image)
+        }
+      }
+    }
+  }
+  
   private func downloadWithUrlSession(at indexPath: IndexPath) {
     URLSession.shared.dataTask(with: urls[indexPath.item]) {
       [weak self] data, response, error in
