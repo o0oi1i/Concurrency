@@ -57,4 +57,4 @@ if group.wait(timeout: .now() + 5) == .timedOut {
     print("All the jobs have completed")
 }
 
-PlaygroundPage.current.finishExecution()
+//PlaygroundPage.current.finishExecution()

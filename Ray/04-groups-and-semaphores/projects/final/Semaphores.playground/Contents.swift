@@ -38,7 +38,7 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 
 let group = DispatchGroup()
 let queue = DispatchQueue.global(qos: .userInteractive)
-let semaphore = DispatchSemaphore(value: 2)
+let semaphore = DispatchSemaphore(value: 4)
 
 let base = "https://wolverine.raywenderlich.com/books/con/image-from-rawpixel-id-"
 let ids = [466881, 466910, 466925, 466931, 466978, 467028, 467032, 467042, 467052]
@@ -53,22 +53,24 @@ for id in ids {
   
   let task = URLSession.shared.dataTask(with: url) { data, _, error in
     defer {
+      print("over \(id)")
       group.leave()
       semaphore.signal()
     }
-    
+    print("middle \(id)")
+
     if error == nil,
       let data = data,
       let image = UIImage(data: data) {
       images.append(image)
     }
   }
-  
+  print("start \(id)")
   task.resume()
 }
 
 group.notify(queue: queue) {
-  images[0]
+  images[3]
   
   //: Make sure to tell the playground you're done so it stops.
   PlaygroundPage.current.finishExecution()

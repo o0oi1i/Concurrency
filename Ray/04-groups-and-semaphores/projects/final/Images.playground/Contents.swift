@@ -50,7 +50,10 @@ for id in ids {
   group.enter()
   
   let task = URLSession.shared.dataTask(with: url) { data, _, error in
-    defer { group.leave() }
+    defer {
+        print(id)
+        group.leave()
+    }
     
     if error == nil,
       let data = data,
@@ -63,7 +66,7 @@ for id in ids {
 }
 
 group.notify(queue: queue) {
-  images[0]
+  images[5]
   
   //: Make sure to tell the playground you're done so it stops.
   PlaygroundPage.current.finishExecution()
