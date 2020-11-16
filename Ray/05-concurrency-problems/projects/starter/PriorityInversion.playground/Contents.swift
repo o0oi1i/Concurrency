@@ -41,7 +41,7 @@ let semaphore = DispatchSemaphore(value: 1)
 
 high.async {
     // Wait 2 seconds just to be sure all the other tasks have enqueued
-    Thread.sleep(forTimeInterval: 2)
+//    Thread.sleep(forTimeInterval: 2)
     semaphore.wait()
     defer { semaphore.signal() }
 
