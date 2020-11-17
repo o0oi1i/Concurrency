@@ -35,11 +35,23 @@ class TiltShiftTableViewController: UITableViewController {
     return 10
   }
 
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "normal", for: indexPath) as! PhotoCell
-    cell.display(image: nil)
+  override func tableView(
+    _ tableView: UITableView,
+    cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    
+    let cell = tableView.dequeueReusableCell(withIdentifier: "normal",
+                                             for: indexPath) as! PhotoCell
 
+    let image = UIImage(named: "\(indexPath.row).png")!
 
+    print("Filtering")
+    let op = TiltShiftOperation(image: image)
+    op.start()
+
+    cell.display(image: op.outputImage)
+    print("Done")
+    
     return cell
   }
+
 }
