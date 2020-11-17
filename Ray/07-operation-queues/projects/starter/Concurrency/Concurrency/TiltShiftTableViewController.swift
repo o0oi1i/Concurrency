@@ -29,6 +29,8 @@
 import UIKit
 
 class TiltShiftTableViewController: UITableViewController {
+  private let queue = OperationQueue()
+
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 10
   }
@@ -39,12 +41,18 @@ class TiltShiftTableViewController: UITableViewController {
 
     let image = UIImage(named: "\(indexPath.row).png")!
 
-    print("Filtering")
     let op = TiltShiftOperation(image: image)
-    op.start()
+    op.completionBlock = {
+      DispatchQueue.main.async {
+        guard let cell = tableView.cellForRow(at: indexPath)
+          as? PhotoCell else { return }
 
-    cell.display(image: op.outputImage)
-    print("Done")
+        cell.isLoading = false
+        cell.display(image: op.outputImage)
+      }
+    }
+
+    queue.addOperation(op)
     
     return cell
   }
