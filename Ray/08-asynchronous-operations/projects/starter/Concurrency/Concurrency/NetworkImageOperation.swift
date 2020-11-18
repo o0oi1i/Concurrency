@@ -1,4 +1,4 @@
-/// Copyright (c) 2019 Razeware LLC
+/// Copyright (c) 2020 Razeware LLC
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -26,52 +26,54 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
+import Foundation
+
 import UIKit
 
-class TiltShiftTableViewController: UITableViewController {
-  private var urls: [URL] = []
+typealias ImageOperationCompletion = ((Data?, URLResponse?, Error?) -> Void)?
 
-  override func viewDidLoad() {
-    super.viewDidLoad()
+final class NetworkImageOperation: AsyncOperation {
+  var image: UIImage?
 
-    guard let plist = Bundle.main.url(forResource: "Photos",
-                                      withExtension: "plist"),
-          let contents = try? Data(contentsOf: plist),
-          let serial = try? PropertyListSerialization.propertyList(
-                          from: contents,
-                          format: nil),
-          let serialUrls = serial as? [String] else {
-      print("Something went horribly wrong!")
-      return
-    }
+  private let url: URL
+  private let completion: ImageOperationCompletion
+  
+  init(
+    url: URL,
+    completion: ImageOperationCompletion = nil) {
+    
+    self.url = url
+    self.completion = completion
 
-    urls = serialUrls.compactMap(URL.init)
+    super.init()
   }
 
-  
-  private let queue = OperationQueue()
-  
-  override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-    return 10
+  convenience init?(
+    string: String,
+    completion: ImageOperationCompletion = nil) {
+    
+    guard let url = URL(string: string) else { return nil }
+    self.init(url: url, completion: completion)
   }
 
-  override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-    let cell = tableView.dequeueReusableCell(withIdentifier: "normal", for: indexPath) as! PhotoCell
-    cell.display(image: nil)
+  override func main() {
+    URLSession.shared.dataTask(with: url) {
+      [weak self] data, response, error in
+      
+      guard let self = self else { return }
 
-    let op = NetworkImageOperation(url: urls[indexPath.row])
-    op.completionBlock = {
-      DispatchQueue.main.async {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PhotoCell
-          else { return }
-        
-        cell.isLoading = false
-        cell.display(image: op.image)
+      defer { self.state = .finished }
+
+      if let completion = self.completion {
+        completion(data, response, error)
+        return
       }
-    }
-    
-    queue.addOperation(op)
-    
-    return cell
+
+      guard error == nil, let data = data else { return }
+
+      self.image = UIImage(data: data)
+
+    }.resume()
   }
+
 }
