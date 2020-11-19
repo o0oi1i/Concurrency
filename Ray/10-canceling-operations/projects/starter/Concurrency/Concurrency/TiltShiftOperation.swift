@@ -69,6 +69,8 @@ final class TiltShiftOperation: Operation {
         print("Failed to generate tilt shift image")
         return
     }
+    
+    guard !isCancelled else { return }
 
     let fromRect = CGRect(origin: .zero, size: imageToProcess.size)
     guard
@@ -78,6 +80,8 @@ final class TiltShiftOperation: Operation {
       print("No image generated")
       return
     }
+    
+    guard !isCancelled else { return }
     
     outputImage = UIImage(cgImage: rendered)
     
