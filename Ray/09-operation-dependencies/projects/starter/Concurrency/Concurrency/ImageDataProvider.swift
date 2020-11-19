@@ -1,4 +1,4 @@
-/// Copyright (c) 2019 Razeware LLC
+/// Copyright (c) 2020 Razeware LLC
 /// 
 /// Permission is hereby granted, free of charge, to any person obtaining a copy
 /// of this software and associated documentation files (the "Software"), to deal
@@ -26,58 +26,9 @@
 /// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 /// THE SOFTWARE.
 
+import Foundation
 import UIKit
 
-final class TiltShiftOperation: Operation {
-  private static let context = CIContext()
-
-  var outputImage: UIImage?
-  
-  /// Callback which will be run *on the main thread*
-  /// when the operation completes.
-  var onImageProcessed: ((UIImage?) -> Void)?
-
-  private let inputImage: UIImage?
-
-  init(image: UIImage? = nil) {
-    inputImage = image
-    super.init()
-  }
-
-  override func main() {
-    let dependencyImage = dependencies
-      .compactMap { ($0 as? ImageDataProvider)?.image }
-      .first
-
-    guard let inputImage = inputImage ?? dependencyImage else {
-      return
-    }
-
-    guard let filter = TiltShiftFilter(image: inputImage, radius:3),
-      let output = filter.outputImage else {
-        print("Failed to generate tilt shift image")
-        return
-    }
-
-    let fromRect = CGRect(origin: .zero, size: inputImage.size)
-    guard
-      let cgImage = TiltShiftOperation.context.createCGImage(output, from: fromRect),
-      let rendered = cgImage.rendered()
-      else {
-        print("No image generated")
-        return
-    }
-    
-    outputImage = UIImage(cgImage: rendered)
-    
-    if let onImageProcessed = onImageProcessed {
-      DispatchQueue.main.async { [weak self] in
-        onImageProcessed(self?.outputImage)
-      }
-    }
-  }
-}
-
-extension TiltShiftOperation: ImageDataProvider {
-  var image: UIImage? { return outputImage }
+protocol ImageDataProvider {
+  var image: UIImage? { get }
 }
