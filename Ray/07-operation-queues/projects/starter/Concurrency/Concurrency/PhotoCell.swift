@@ -33,7 +33,9 @@ final class PhotoCell: UITableViewCell {
   @IBOutlet private weak var activityIndicator: UIActivityIndicatorView!
 
   var isLoading: Bool {
-    get { return activityIndicator.isAnimating }
+    get {
+      return activityIndicator.isAnimating
+    }
     set {
       if newValue {
         activityIndicator.startAnimating()
