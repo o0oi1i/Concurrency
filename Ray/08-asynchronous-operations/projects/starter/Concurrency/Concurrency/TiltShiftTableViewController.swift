@@ -30,6 +30,7 @@ import UIKit
 
 class TiltShiftTableViewController: UITableViewController {
   private var urls: [URL] = []
+  private let queue = OperationQueue()
 
   override func viewDidLoad() {
     super.viewDidLoad()
@@ -47,9 +48,7 @@ class TiltShiftTableViewController: UITableViewController {
 
     urls = serialUrls.compactMap(URL.init)
   }
-
   
-  private let queue = OperationQueue()
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     return 10
