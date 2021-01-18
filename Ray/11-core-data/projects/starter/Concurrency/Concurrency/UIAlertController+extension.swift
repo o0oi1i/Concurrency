@@ -29,16 +29,22 @@
 import UIKit
 
 extension UIAlertController {
-  private static func createAlert(withMessage message: String, showCancelButton: Bool, presentingViewController: UIViewController? = nil, completion: (() -> Void)? = nil) {
+  private static func createAlert(withMessage message: String,
+                                  showCancelButton: Bool,
+                                  presentingViewController: UIViewController? = nil,
+                                  completion: (() -> Void)? = nil) {
     guard let presentingViewController = presentingViewController ?? UIApplication.shared.keyWindow?.rootViewController else { return }
 
-    let alert = UIAlertController(title: nil, message: message, preferredStyle: .alert)
+    let alert = UIAlertController(title: nil,
+                                  message: message,
+                                  preferredStyle: .alert)
     alert.addOKButton()
     if showCancelButton {
       alert.addCancelButton()
     }
 
-    presentingViewController.present(alert, animated: true, completion: completion)
+    presentingViewController.present(alert, animated: true,
+                                     completion: completion)
   }
 
   /// Presents an alert dialog with an OK button and no title.
@@ -47,8 +53,13 @@ extension UIAlertController {
   ///   - message: The message which you wish to display.
   ///   - presentingViewController: The UIViewController which should present the alert dialog.
   ///   - completion: The optional completion handler to call once the alert has been presented.
-  static func ok(withMessage message: String, presentingViewController: UIViewController? = nil, completion: (() -> Void)? = nil) {
-    createAlert(withMessage: message, showCancelButton: false, presentingViewController: presentingViewController, completion: completion)
+  static func ok(withMessage message: String,
+                 presentingViewController: UIViewController? = nil,
+                 completion: (() -> Void)? = nil) {
+    createAlert(withMessage: message,
+                showCancelButton: false,
+                presentingViewController: presentingViewController,
+                completion: completion)
   }
 
   /// Presents an alert dialog with both an OK and a Cancel button.
@@ -57,8 +68,13 @@ extension UIAlertController {
   ///   - message: The message which you wish to display.
   ///   - presentingViewController: The UIViewController which should present the alert dialog.
   ///   - completion: The optional completion handler to call once the alert has been presented.
-  static func cancel(withMessage message: String, presentingViewController: UIViewController? = nil, completion: (() -> Void)? = nil) {
-    createAlert(withMessage: message, showCancelButton: true, presentingViewController: presentingViewController, completion: completion)
+  static func cancel(withMessage message: String,
+                     presentingViewController: UIViewController? = nil,
+                     completion: (() -> Void)? = nil) {
+    createAlert(withMessage: message,
+                showCancelButton: true,
+                presentingViewController: presentingViewController,
+                completion: completion)
   }
 
   /// Adds a cancel button to the alert controller.
@@ -66,7 +82,9 @@ extension UIAlertController {
   /// - Parameter handler: A block to execute when the user presses the cancel button.
   func addCancelButton(_ handler: ((UIAlertAction?) -> Void)? = nil) {
     let cancel = NSLocalizedString("Cancel", comment: "The cancel button")
-    addAction(UIAlertAction(title: cancel, style: .cancel, handler: handler))
+    addAction(UIAlertAction(title: cancel,
+                            style: .cancel,
+                            handler: handler))
   }
 
   /// Adds an OK button to the alert controller.
@@ -74,7 +92,9 @@ extension UIAlertController {
   /// - Parameter handler: A block to execute when the user presses the OK button.
   func addOKButton(_ handler: ((UIAlertAction?) -> Void)? = nil) {
     let ok = NSLocalizedString("OK", comment: "The OK button")
-    addAction(UIAlertAction(title: ok, style: .default, handler: handler))
+    addAction(UIAlertAction(title: ok,
+                            style: .default,
+                            handler: handler))
   }
 }
 
