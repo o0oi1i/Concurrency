@@ -28,3 +28,26 @@
 
 import Foundation
 
+let sentence = "Ray’s courses are the best!"
+let wordOperation = BlockOperation{
+    print("2 + 3 = \(2 + 3)")
+}
+
+for word in sentence.split(separator: " ") {
+  wordOperation.addExecutionBlock {
+    print(word)
+    sleep(2)
+  }
+}
+
+duration {
+    wordOperation.completionBlock = {
+        print(duration {
+                print("Thank you for your patronage!")
+        })
+    }
+}
+
+duration {
+  wordOperation.start()
+}
