@@ -85,7 +85,7 @@ final class TiltShiftOperation: Operation {
     
     outputImage = UIImage(cgImage: rendered)
     
-    if let onImageProcessed = onImageProcessed {
+    if let onImageProcessed = onImageProcessed { 
       DispatchQueue.main.async { [weak self] in
         onImageProcessed(self?.outputImage)
       }
