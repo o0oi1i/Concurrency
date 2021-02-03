@@ -41,10 +41,12 @@ class AsyncOperation: Operation {
     willSet {
       willChangeValue(forKey: newValue.keyPath)
       willChangeValue(forKey: state.keyPath)
+      print("1. \(newValue.keyPath) ~ \(state.keyPath)")
     }
     didSet {
       didChangeValue(forKey: oldValue.keyPath)
       didChangeValue(forKey: state.keyPath)
+      print("2. \(oldValue.keyPath) ~ \(state.keyPath)")
     }
   }
 

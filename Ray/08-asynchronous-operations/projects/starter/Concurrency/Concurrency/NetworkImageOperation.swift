@@ -62,7 +62,7 @@ final class NetworkImageOperation: AsyncOperation {
       
       guard let self = self else { return }
 
-      defer { self.state = .finished }
+      self.state = .finished
 
       if let completion = self.completion {
         completion(data, response, error)
@@ -72,7 +72,7 @@ final class NetworkImageOperation: AsyncOperation {
       guard error == nil, let data = data else { return }
 
       self.image = UIImage(data: data)
-
+      print("url:\(self.url)")
     }.resume()
   }
 

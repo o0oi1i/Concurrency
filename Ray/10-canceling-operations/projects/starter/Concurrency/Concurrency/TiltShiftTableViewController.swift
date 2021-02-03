@@ -57,20 +57,24 @@ class TiltShiftTableViewController: UITableViewController {
     
     let downloadOp = NetworkImageOperation(url: urls[indexPath.row])
     let tiltShiftOp = TiltShiftOperation()
-    tiltShiftOp.addDependency(downloadOp)
+//    tiltShiftOp.addDependency(downloadOp)
 
-    tiltShiftOp.onImageProcessed = { image in
-      guard let cell = tableView.cellForRow(at: indexPath)
-        as? PhotoCell else {
-          return
-      }
-      
-      cell.isLoading = false
-      cell.display(image: image)
-    }
+//    tiltShiftOp.onImageProcessed = { image in
+//      guard let cell = tableView.cellForRow(at: indexPath)
+//        as? PhotoCell else {
+//          return
+//      }
+//
+//      cell.isLoading = false
+//      cell.display(image: image)
+//    }
 
     queue.addOperation(downloadOp)
-    queue.addOperation(tiltShiftOp)
+    queue.addOperation(downloadOp)
+//    queue.addOperation(tiltShiftOp)
+    
+    queue.waitUntilAllOperationsAreFinished()
+    print("999999")
     
     if let existingOperations = operations[indexPath] {
       for operation in existingOperations {
@@ -78,7 +82,7 @@ class TiltShiftTableViewController: UITableViewController {
       }
     }
 
-    operations[indexPath] = [tiltShiftOp, downloadOp]
+    operations[indexPath] = [downloadOp, downloadOp]
 
 
     return cell

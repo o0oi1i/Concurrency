@@ -65,6 +65,8 @@ final class NetworkImageOperation: AsyncOperation {
       guard error == nil, let data = data else { return }
 
       self.image = UIImage(data: data)
+      
+      print("NetworkImageOperation Done")
     }
     task?.resume()
   }

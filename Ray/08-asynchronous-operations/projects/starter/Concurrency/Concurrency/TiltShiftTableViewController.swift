@@ -47,6 +47,16 @@ class TiltShiftTableViewController: UITableViewController {
     }
 
     urls = serialUrls.compactMap(URL.init)
+    
+    let op  = NetworkImageOperation(url: urls[0])
+//    let op1 = NetworkImageOperation(url: urls[1])
+
+    queue.addOperation(op)
+//    queue.addOperation(op1)
+    
+    queue.waitUntilAllOperationsAreFinished()
+    
+    print("99999999")
   }
   
   
@@ -58,18 +68,18 @@ class TiltShiftTableViewController: UITableViewController {
     let cell = tableView.dequeueReusableCell(withIdentifier: "normal", for: indexPath) as! PhotoCell
     cell.display(image: nil)
 
-    let op = NetworkImageOperation(url: urls[indexPath.row])
-    op.completionBlock = {
-      DispatchQueue.main.async {
-        guard let cell = tableView.cellForRow(at: indexPath) as? PhotoCell
-          else { return }
-        
-        cell.isLoading = false
-        cell.display(image: op.image)
-      }
-    }
-    
-    queue.addOperation(op)
+//    let op = NetworkImageOperation(url: urls[indexPath.row])
+//    op.completionBlock = {
+//      DispatchQueue.main.async {
+//        guard let cell = tableView.cellForRow(at: indexPath) as? PhotoCell
+//          else { return }
+//
+//        cell.isLoading = false
+//        cell.display(image: op.image)
+//      }
+//    }
+//
+//    queue.addOperation(op)
     
     return cell
   }
