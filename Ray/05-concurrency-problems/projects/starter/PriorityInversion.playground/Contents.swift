@@ -41,7 +41,7 @@ let semaphore = DispatchSemaphore(value: 1)
 
 high.async {
     // Wait 2 seconds just to be sure all the other tasks have enqueued
-//    Thread.sleep(forTimeInterval: 2)
+    Thread.sleep(forTimeInterval: 2)
     semaphore.wait()
     defer { semaphore.signal() }
 
@@ -51,8 +51,9 @@ high.async {
 for i in 1 ... 10 {
     medium.async {
         let waitTime = Double(exactly: arc4random_uniform(7))!
-        print("Running medium task \(i)")
+        print("Running medium task \(i) waitTime:\(waitTime)")
         Thread.sleep(forTimeInterval: waitTime)
+        print("Running medium task \(i)")
     }
 }
 
@@ -63,4 +64,3 @@ low.async {
     print("Running long, lowest priority task")
     Thread.sleep(forTimeInterval: 5)
 }
-

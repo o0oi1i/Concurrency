@@ -80,8 +80,7 @@ final class CollectionViewController: UICollectionViewController {
       }
 
       DispatchQueue.main.async {
-        if let cell = self.collectionView
-          .cellForItem(at: indexPath) as? PhotoCell {
+        if let cell = self.collectionView.cellForItem(at: indexPath) as? PhotoCell {
           cell.display(image: image)
         }
       }

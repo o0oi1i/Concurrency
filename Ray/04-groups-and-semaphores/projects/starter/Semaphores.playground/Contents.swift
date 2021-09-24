@@ -39,11 +39,12 @@ PlaygroundPage.current.needsIndefiniteExecution = true
 let group = DispatchGroup()
 let queue = DispatchQueue.global(qos: .userInteractive)
 
-let semaphore = DispatchSemaphore(value: 9)
+let semaphore = DispatchSemaphore(value: 4)
 
-for i in 1...20 {
+for i in 1...10 {
   queue.async(group: group) {
     semaphore.wait()
+    
     defer { semaphore.signal() }
 
     print("Downloading image \(i)")
@@ -54,9 +55,6 @@ for i in 1...20 {
     print("Finish image \(i)")
   }
 }
-
-
-
 
 // Because we've not specified a time, this will wait indefinitely
 group.wait()
