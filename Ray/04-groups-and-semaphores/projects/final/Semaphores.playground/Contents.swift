@@ -41,7 +41,7 @@ let queue = DispatchQueue.global(qos: .userInteractive)
 let semaphore = DispatchSemaphore(value: 4)
 
 let base = "https://wolverine.raywenderlich.com/books/con/image-from-rawpixel-id-"
-let ids = [466881, 466910, 466925, 466931, 466978, 467028, 467032, 467042, 467052]
+let ids = [466881, 466910, 466925, 466931, 466978, 467028, 466931, 466978, 467028, 466910, 466925, 466931, 467032, 467042, 467052]
 
 var images: [UIImage] = []
 
@@ -50,14 +50,14 @@ for id in ids {
   
   semaphore.wait()
   group.enter()
-  
+
   let task = URLSession.shared.dataTask(with: url) { data, _, error in
     defer {
-      print("over \(id)")
+      print("Finish \(id)")
       group.leave()
       semaphore.signal()
     }
-    print("middle \(id)")
+//    print("middle \(id)")
 
     if error == nil,
       let data = data,
@@ -65,7 +65,7 @@ for id in ids {
       images.append(image)
     }
   }
-  print("start \(id)")
+  print("Downloading \(id)")
   task.resume()
 }
 

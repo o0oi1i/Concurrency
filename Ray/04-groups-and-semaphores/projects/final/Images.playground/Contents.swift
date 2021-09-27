@@ -61,7 +61,6 @@ for id in ids {
       images.append(image)
     }
   }
-  
   task.resume()
 }
 
